@@ -1,0 +1,127 @@
+# fleet_management.py
+
+class Vehicle:
+    def __init__(self, registration_number, make, model):  # Fixed typo in constructor method
+        self.registration_number = registration_number
+        self.make = make
+        self.model = model
+
+    def display_info(self):
+        return f"Registration Number: {self.registration_number}, Make: {self.make}, Model: {self.model}"
+
+class Car(Vehicle):
+    def __init__(self, registration_number, make, model, number_of_seats=None):  # Fixed typo in constructor method
+        super().__init__(registration_number, make, model)  # Fixed typo in super call
+        self.number_of_seats = number_of_seats
+
+    def display_info(self):
+        return super().display_info() + f", Number of Seats: {self.number_of_seats}"
+
+class Truck(Vehicle):
+    def __init__(self, registration_number, make, model, cargo_capacity=None):  # Fixed typo in constructor method
+        super().__init__(registration_number, make, model)  # Fixed typo in super call
+        self.cargo_capacity = cargo_capacity
+
+    def display_info(self):
+        return super().display_info() + f", Cargo Capacity: {self.cargo_capacity}"
+
+class Motorcycle(Vehicle):
+    def __init__(self, registration_number, make, model, engine_capacity=None):  # Fixed typo in constructor method
+        super().__init__(registration_number, make, model)  # Fixed typo in super call
+        self.engine_capacity = engine_capacity
+
+    def display_info(self):
+        return super().display_info() + f", Engine Capacity: {self.engine_capacity}"
+
+class Fleet:
+    def __init__(self):  # Fixed typo in constructor method
+        self.vehicles = []
+
+    def add_vehicle(self, vehicle):
+        self.vehicles.append(vehicle)
+
+    def display_vehicles(self):
+        for vehicle in self.vehicles:
+            print(vehicle.display_info())
+
+    def search_vehicle(self, registration_number):
+        for vehicle in self.vehicles:
+            if vehicle.registration_number == registration_number:
+                print(vehicle.display_info())
+                return
+        print("Vehicle not found.")
+
+def main():
+    fleet = Fleet()
+    current_vehicle = None
+
+    try:
+        while True:
+            print("\n1. Add a vehicle")
+            print("2. Display all vehicles")
+            print("3. Search for a vehicle by registration number")
+            print("4. Continue adding details to current vehicle")
+            print("5. Exit")
+
+            choice = input("Enter your choice: ")
+
+            if choice == '1':
+                reg_num = input("Enter registration number: ")
+                make = input("Enter make: ")
+                model = input("Enter model: ")
+                vehicle_type = input("Enter vehicle type (Car/Truck/Motorcycle): ").lower()
+
+                if vehicle_type == 'car':
+                    seats = input("Enter number of seats (or leave empty to add later): ")
+                    seats = int(seats) if seats else None
+                    current_vehicle = Car(reg_num, make, model, seats)
+                elif vehicle_type == 'truck':
+                    capacity = input("Enter cargo capacity (or leave empty to add later): ")
+                    capacity = float(capacity) if capacity else None
+                    current_vehicle = Truck(reg_num, make, model, capacity)
+                elif vehicle_type == 'motorcycle':
+                    engine_capacity = input("Enter engine capacity (or leave empty to add later): ")
+                    engine_capacity = float(engine_capacity) if engine_capacity else None
+                    current_vehicle = Motorcycle(reg_num, make, model, engine_capacity)
+                else:
+                    print("Invalid vehicle type.")
+                    continue
+
+                fleet.add_vehicle(current_vehicle)
+                current_vehicle = None
+
+            elif choice == '2':
+                fleet.display_vehicles()
+
+            elif choice == '3':
+                reg_num = input("Enter registration number to search: ")
+                fleet.search_vehicle(reg_num)
+
+            elif choice == '4':
+                if current_vehicle:
+                    if isinstance(current_vehicle, Car) and current_vehicle.number_of_seats is None:
+                        seats = input("Enter number of seats: ")
+                        current_vehicle.number_of_seats = int(seats)
+                    elif isinstance(current_vehicle, Truck) and current_vehicle.cargo_capacity is None:
+                        capacity = input("Enter cargo capacity: ")
+                        current_vehicle.cargo_capacity = float(capacity)
+                    elif isinstance(current_vehicle, Motorcycle) and current_vehicle.engine_capacity is None:
+                        engine_capacity = input("Enter engine capacity: ")
+                        current_vehicle.engine_capacity = float(engine_capacity)
+                    else:
+                        print("No further details required for current vehicle.")
+                else:
+                    print("No vehicle in progress. Please start adding a new vehicle first.")
+
+            elif choice == '5':
+                print("Exiting the program.")
+                break
+
+            else:
+                print("Invalid choice. Please try again.")
+
+    except KeyboardInterrupt:
+        print("\nProgram terminated by user. Exiting...")
+
+if __name__ == "__main__":  # Fixed typo in the main check
+    main()
